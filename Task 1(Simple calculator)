@@ -1,0 +1,76 @@
+class SimpleCalc:
+    def __init__(self):
+        # Maps symbols to internal math functions
+        self.operations = {
+            '+': self._add,
+            '-': self._subtract,
+            '*': self._multiply,
+            'x': self._multiply,
+            '/': self._divide
+        }
+
+    def _add(self, a, b):
+        return a + b
+
+    def _subtract(self, a, b):
+        return a - b
+
+    def _multiply(self, a, b):
+        return a * b
+
+    def _divide(self, a, b):
+        if b == 0:
+            return "Error: Cannot divide by zero."
+        return a / b
+
+    def parse_and_compute(self, expression):
+        """
+        Validates and evaluates an arithmetic expression in string format.
+        Expected format: 'number operator number'
+        """
+        parts = expression.strip().split()
+
+        if len(parts) != 3:
+            return "Error: Use the format 'number operator number'."
+
+        try:
+            left = float(parts[0])
+            op = parts[1].lower()
+            right = float(parts[2])
+        except ValueError:
+            return "Error: Make sure to enter valid numbers."
+
+        if op not in self.operations:
+            valid = ', '.join(self.operations.keys())
+            return f"Error: Unknown operator '{op}'. Try one of: {valid}."
+
+        return self.operations[op](left, right)
+
+    def run(self):
+        """
+        Initiates the calculator session with the user.
+        """
+        print("\n🧮 WELCOME TO PYTHON TERMINAL CALCULATOR 🧮")
+        print("Enter math like '8 + 3', '9 / 2', or '4 x 6'")
+        print("Type 'exit' to close the calculator.\n")
+
+        while True:
+            user_input = input("Calc> ").strip()
+
+            if user_input.lower() == "exit":
+                print("\n👋 Exiting. Thanks for calculating!")
+                break
+
+            result = self.parse_and_compute(user_input)
+
+            if isinstance(result, str) and result.startswith("Error"):
+                print(result)
+            else:
+                print(f"Result: {result}")
+
+            print("-" * 30)
+
+
+if __name__ == "__main__":
+    calc_app = SimpleCalc()
+    calc_app.run()
